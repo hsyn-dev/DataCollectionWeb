@@ -15,7 +15,13 @@ public partial class DataCollectionDbContext : DbContext
     {
     }
 
+    public virtual DbSet<QuestionAnswretable> QuestionAnswretables { get; set; }
+
+    public virtual DbSet<QuestionTable> QuestionTables { get; set; }
+
     public virtual DbSet<StoryTable> StoryTables { get; set; }
+
+    public virtual DbSet<UserQuestionAnswreTable> UserQuestionAnswreTables { get; set; }
 
     public virtual DbSet<UserStoryTable> UserStoryTables { get; set; }
 
@@ -27,11 +33,9 @@ public partial class DataCollectionDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<UserStoryTable>(entity =>
+        modelBuilder.Entity<UserQuestionAnswreTable>(entity =>
         {
-            entity.HasOne(d => d.Story).WithMany(p => p.UserStoryTables).HasConstraintName("FK_UserStoryTable_StoryTable");
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserStoryTables).HasConstraintName("FK_UserStoryTable_UserTable");
+            entity.HasKey(e => e.Id).HasName("PK_User_Question_AnswreTable_1");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,5 +1,10 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+}
+font-face {
+    font-family: 'B Koodak'
 }
 
 @media (min-width: 768px) {
@@ -13,10 +18,23 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+    margin: 0px;
+    padding: 0px;
 }
-
+* {
+    margin: 0px;
+    padding: 0px;
+}
 body {
   margin-bottom: 60px;
+  margin : 0px ;
+  padding : 0px ; 
+  
 }
+body, html {
+    margin: 0;
+    padding: 0;
+}
+ 

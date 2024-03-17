@@ -1,55 +1,81 @@
 ﻿@model UserTable
   
 
-<section class="h-100 h-custom" style="background-color: #8fc4b7;">
+<section class="h-100 w-100" style="background-color: #8fc4b7;  ">
     <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100" style="max-height:100% ; max-width: 100%; ">
             <div class="col-lg-8 col-xl-6">
                 <div class="card rounded-3">
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img3.webp"
                          class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
                          alt="Sample photo">
                     <div class="card-body p-4 p-md-5">
-                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registration Info</h3>
+                        <h3 dir="rtl" class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">اطلاعات فردی</h3>
 
                         <form class="px-md-2" method="post" dir="rtl" asp-action="Register" asp-controller="Home" enctype="multipart/form-data">
-
-                         
+                             
+                      
 
                             <div class="row">
                                 <div class="col-md-12 mb-4">
 
                                     <div class="form-outline datepicker">
+                                        <label for="exampleDatepicker1" class="form-label"> سن :  </label>
                                         <input asp-for=Age value="" type="text" class="form-control" placeholder="مثال : 28" id="exampleDatepicker1" />
-                                        <label for="exampleDatepicker1" class="form-label">سن </label>
-                                    </div>
+                                     </div>
+                                    <div class="col-12">     <span asp-validation-for="Age" class="text-danger"></span></div>
 
                                 </div>
-                                <div class="col-md-12 mb-4">
+                                <hr />
 
-                                    <select asp-for=Gender class="select">
-                                        <option value="1" disabled>جنسیت</option>
-                                        <option value="مرد">مرد</option>
-                                        <option value="زن">زن</option>
+                                <div class="col-md-12 mb-4">
+                                    <div class="col-12">
+
+                                        <label>جنسیت : </label>
+
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                      
+                                        <select asp-for=Gender class="select">
+                                            <option value="1" disabled selected>انتخاب کنید</option>
+                                            <option value="مرد">مرد</option>
+                                            <option value="زن">زن</option>
+
+                                        </select>
+                                     
+
+                                    </div>
+                                    <div class="col-12">     <span asp-validation-for="Gender" class="text-danger"></span></div>
+
+
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="mb-4 d-flex row ">
+                                <div class="col-12" >
+                                     <label>تحصیلات  : </label>
+                                 </div>
+                                <div class="col-12 mt-3">
+                                    <select asp-for=Lof class="select">
+                                        <option value="" disabled selected>انتخاب کنید</option>
+                                        <option value="1 "> دیپلم</option>
+                                        <option value=" 2  ">  لیسانس</option>
+                                        <option value=" 3 ">  فوق لیسانس  </option>
+                                        <option value=" 4 ">  دکتری   </option>
+                                      
 
                                     </select>
+                                    
+
 
                                 </div>
-                            </div>
+                                <div class="col-12">     <span asp-validation-for="Lof" class="text-danger"></span></div>
 
-                            <div class="mb-4">
-
-                                <select asp-for=Lof class="select">
-                                    <option value="1" disabled>سال تحیسلات</option>
-                                    <option value="یک ">یک سال</option>
-                                    <option value=" دو  ">دو سال</option>
-                                    <option value=" سه ">سه سال</option>
-                                </select>
-
+                    
                             </div>
 
 
-                            <button type="submit"   class="btn btn-success btn-lg mb-1"  >Submit</button>
+                            <button type="submit"   class="btn btn-primary btn-lg mb-1  mt-5 d-flex justify-content-center"  >مرحله بعدی</button>
                           
 
                         </form>

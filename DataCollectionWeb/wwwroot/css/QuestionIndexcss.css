@@ -1,0 +1,23 @@
+﻿body{
+    display:flex ; 
+    justify-content:center ; 
+}
+#firsttext {
+    font-weight : bold ; 
+    color:green ; 
+    background-color : chartreuse ;
+}
+#QuestionBox{
+    margin : 10px;
+    padding : 13px ; 
+    width : 600px ;
+}
+#questiontable {
+    margin: 10px;
+    padding: 13px;
+   
+}
+#AnswreItem{
+    display:flex ;
+    justify-content :space-around ; 
+}

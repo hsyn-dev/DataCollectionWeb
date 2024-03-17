@@ -14,14 +14,17 @@ public partial class UserTable
     public int UserId { get; set; }
 
     [StringLength(50)]
+    [Required(ErrorMessage ="این فیلد اجباری است .")]
     public string? Age { get; set; }
+    [Required(ErrorMessage = "این فیلد اجباری است .")]
 
     [StringLength(50)]
     public string? Gender { get; set; }
 
     [StringLength(200)]
+    [Required(ErrorMessage = "این فیلد اجباری است .")]
+
     public string? Lof { get; set; }
 
-    [InverseProperty("User")]
-    public virtual ICollection<UserStoryTable> UserStoryTables { get; set; } = new List<UserStoryTable>();
+    public bool? Iscomplete { get; set; }
 }

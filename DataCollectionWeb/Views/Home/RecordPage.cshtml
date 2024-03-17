@@ -1,0 +1,269 @@
+﻿@model UserStoryTable
+
+<style>
+    body {
+        background-color: #8fc4b7;
+        display:flex;
+        justify-content:center;
+        flex-direction:column;
+
+    }
+</style>
+<div class="main d-flex justify-content-center flex-column">
+    <h1 class="d-flex justify-content-center mt-4">tittle</h1>
+    <p class="d-flex justify-content-center mt-4">tittledescriptoion</p>
+    <div class="container d-flex justify-content-center flex-column" style="background-color:white; border-radius:10px;  width:950px ; ">
+
+        <div class="row d-flex   justify-content-center" id="firstpart">
+            <div class=" row col-12  p-5 d-flex   justify-content-center  " style="width:800px;height:800px;">
+                <div class="col-12 d-flex  justify-content-center ">
+                    <form method="post" enctype="multipart/form-data">
+                        <audio style="display:none;" id="storyaudio" controls>
+                            <source src="@Url.Content($"~/StoriesAudio/{ViewBag.AudioFileContent}")" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+
+                        <input type="hidden" name="currentIndex" value="@ViewBag.CurrentIndex" />
+                    </form>
+                </div>
+
+                <div class="col-12 d-flex justify-content-center" style="border-radius:10px;">
+                    <img id="visualizeaudioplay" style="width:700px; height:210px; border: 2px solid black; display:none ; " src="~/gif/set-diet-sound-bars.gif" />
+                </div>
+                <div class=" col-12 d-flex justify-content-center" >
+                    <img src="~/images/play.png" style="display:block; width:150px; height : 150px; " class="mt-4" id="playdtory" />
+                    <h1 class="d-flex justify-content-center text-danger fw-bold" style="display:none !important;" id="playtext">در حال پخش</h1>
+
+                </div>
+
+
+                <div id="waitgif" class="col-12  d-flex justify-content-center flex-column  align-content-center  p-4" style="margin-bottom:210px;" >
+                    @* <img style="width:300px ; height : 300px ; display:none ; margin:29px; display:flex; justify-content:center;  ;  " id="waitgif" src="~/gif/giphy.gif" /> *@
+                    <div style="font-size:100px; font-weight:bold" class="text-danger d-flex justify-content-center " id="Timer"></div>
+                    <p id="30swaittext" class="text-danger " style="display:none;font-size:35px; font-weight:bold; margin-top:15px;">بعد از 30 ثانیه شروع به ضبط صدا کنید . </p>
+                </div>
+
+                @* second part for recoding audio  *@
+
+                <div class="col-12 bg bg-gradient d-flex justify-content-center   rounded" id="secondpart" style="display: none !important; margin-bottom:350px; ">
+                    <div class="row mt-4 mb-4 p-3  d-flex  justify-content-center">
+                        <div class="col-12 d-flex justify-content-center">
+
+                            <img id="recordingShow" style="width:100px ; height:100px ;display:none;   " src="~/gif/circlerecord.gif" />
+                        </div>
+
+                        <div class="col-12 d-flex justify-content-center mt-4">
+                            <p class="  text-dark   p-2 rounded">توجه : هر زمان که آماده بودید شروع  به ضبط کنید  </p>
+                        </div>
+
+                        <div class="col-12 mt-5 d-flex justify-content-center">
+                            <img style="width:90px; height:90px; display:block; " src="~/images/record.png" id="recordButton" class="m-3" />
+                            <img style="width:90px; height:90px; display:none !important;" src="~/images/stop-button.png" id="stopButton" class="m-3" />
+
+                        </div>
+                        <div class="col-12 mt-4 d-flex justify-content-center">
+                            <p style="font-size:40px;" id="timerDisplay" class="text-danger  p-5 rounded">00:00</p>
+                        </div>
+
+                        <div class="d-flex flex-column justify-content-center">
+                            <audio style="display:none;" class="d-flex justify-content-center" id="audioPlayer" controls>
+                                Your browser does not support the audio element.
+                            </audio>
+                            <div class="col-12 mt-4 d-flex justify-content-center">
+                                @if (ViewBag.CurrentIndex < ViewBag.TotalFilesCount - 1)
+                                {
+                                    <button id="nextaudiobutton" class="btn btn-primary m-2" onclick="location.href='@Url.Action("RecordPage", new { currentIndex = ViewBag.CurrentIndex + 1 })'">داستان بعدی</button>
+                                }
+                                <button class="btn btn-danger m-2" onclick="location.href='@Url.Action("Index", "Question", new { id = 0 })'">مرحله بعدی آزمون</button>
+                            </div>
+
+                            <button class="btn btn-success m-3" id="sendButton" style="display:none;">ارسال و رفتن به مرحله بعد</button>
+                            <button class="btn btn-warning m-3" id="resetRecordingButton" style="display:none;">ضبط مجدد</button>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+</div>
+</div>
+<script>
+
+    const textforwait = document.getElementById('30swaittext');
+    const playdtoryButton = document.getElementById('playdtory');
+    const storyAudio = document.getElementById('storyaudio');
+    const visualizeAudioPlay = document.getElementById('visualizeaudioplay');
+    const playtext = document.getElementById('playtext');
+    const waitgif = document.getElementById('waitgif');
+    const recordButton = document.getElementById('recordButton');
+    const stopButton = document.getElementById('stopButton');
+    const sendButton = document.getElementById('sendButton');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const resetRecordingButton = document.getElementById('resetRecordingButton');
+    let mediaRecorder;
+    let chunks = [];
+    recordButton.addEventListener('click', startRecording);
+    resetRecordingButton.addEventListener('click', startRecording);
+    stopButton.addEventListener('click', stopRecording);
+    sendButton.addEventListener('click', sendAudio);
+
+    playdtoryButton.addEventListener('click', function () {
+
+
+        console.log("Play button clicked");
+        console.log("Display before: " + document.getElementById("playdtory").style.display);
+        document.getElementById("playdtory").style.display = "none";
+        document.getElementById("playtext").style.display = "block";
+        if (storyAudio.paused) {
+            visualizeAudioPlay.style.display = 'block';
+          
+            waitgif.style.display = "none";
+
+            // Listen for the "ended" event
+            storyAudio.addEventListener("ended", function () {
+              
+
+                ///////
+                var timeLeft = 30;
+                var elem = document.getElementById('Timer');
+
+                var timerId = setInterval(countdown, 1000);
+
+                function countdown() {
+
+                    if (timeLeft == 0) {
+                        clearTimeout(timerId);
+                        doSomething();
+                       
+                    } else {
+                        elem.innerHTML = timeLeft  ;
+                        timeLeft--;
+                    }
+                }
+
+                document.getElementById("30swaittext").style.display = "flex";
+                document.getElementById("30swaittext").style.justifyContent = "center";
+                visualizeAudioPlay.style.display = "none";
+                waitgif.style.display = "block";
+                
+                setTimeout(function () {
+                    waitgif.style.display = "none";
+                    textforwait.style.display = "none";
+                    document.getElementById("Timer").style.setProperty('display', 'none', 'important');
+                    document.getElementById("secondpart").style.display = "block";
+                }, 3000); // 30 seconds timeout
+                document.getElementById("playtext").style.setProperty('display', 'none', 'important');
+            });
+            storyAudio.play();
+          
+        } else {
+            storyAudio.pause();
+            visualizeAudioPlay.style.display = 'none';
+       
+        }
+    });
+
+    // function startRecording() {
+    //     document.getElementById("recordingShow").style.display = "none";
+    //     document.getElementById("recordButton").style.display = "none";
+    //     document.getElementById("stopButton").style.display = "block";
+    //     document.getElementById("resetRecordingButton").style.display = "none";
+    //     document.getElementById("sendButton").style.display = "none";
+    //     // document.getElementById("audioPlayer").style.display = "none";
+    //     startTimer()
+    //     navigator.mediaDevices.getUserMedia({ audio: true })
+    //         .then(stream => {
+    //             mediaRecorder = new MediaRecorder(stream);
+    //             mediaRecorder.ondataavailable = e => chunks.push(e.data);
+    //             mediaRecorder.start();
+    //             recordButton.disabled = true;
+    //             stopButton.disabled = false;
+    //             sendButton.disabled = true;
+    //         });
+    // }
+    function startRecording () {
+        document.getElementById("recordingShow").style.display = "none";
+        document.getElementById("recordButton").style.display = "none";
+        document.getElementById("stopButton").style.display = "block";
+        document.getElementById("resetRecordingButton").style.display = "none";
+        document.getElementById("sendButton").style.display = "none";
+        // document.getElementById("audioPlayer").style.display = "none";
+        startTimer();
+
+        const constraints = {
+            audio: {
+                sampleRate: 16000,
+                channelCount: 1, // Adjust channel count if needed
+                audioBitsPerSecond: 16
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                mediaRecorder.start();
+                recordButton.disabled = true;
+                stopButton.disabled = false;
+                sendButton.disabled = true;
+            });
+    }
+
+    function stopRecording() {
+
+        document.getElementById("recordButton").style.display = "none";
+        document.getElementById("stopButton").style.display = "none";
+        document.getElementById("resetRecordingButton").style.display = "block";
+        document.getElementById("sendButton").style.display = "block";
+
+        mediaRecorder.stop();
+        stopTimer()
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+        sendButton.disabled = false;
+    }
+    function sendAudio() {
+        const blob = new Blob(chunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append('audioFile', blob, 'recorded_audio.wav');
+        formData.append('data', '@ViewBag.CurrentIndex');
+        alert("فایل ضبط شده ارسال شد . ")
+        fetch('@Url.Action("RecordPage")', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                console.log('Audio sent successfully.');
+            })
+            .catch(error => {
+                console.error('Error sending audio.');
+            });
+        chunks = [];
+    }
+    //////timer
+    let recordingStartTime;
+    let timerInterval;
+    // Timer display element
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    function updateTimerDisplay() {
+        const elapsedTime = Math.floor((Date.now() - recordingStartTime) / 1000);
+        timerDisplay.textContent = formatTime(elapsedTime);
+    }
+    function startTimer() {
+        recordingStartTime = Date.now();
+        timerInterval = setInterval(updateTimerDisplay, 1000);
+        updateTimerDisplay(); // Update immediately
+    }
+    function stopTimer() {
+        clearInterval(timerInterval);
+        timerDisplay.textContent = "00:00"; // Reset timer display
+    }
+</script>

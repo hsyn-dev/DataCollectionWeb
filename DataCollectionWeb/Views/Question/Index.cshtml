@@ -1,0 +1,579 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Center Form on Page</title>
+    <style>
+     
+        main{
+           display : flex ; 
+           flex-direction: column ; 
+           justify-content:center;
+           align-items : center ; 
+        }
+        body {
+            background-color: #8fc4b7;
+            display: flex;
+            justify-content: center;
+         
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            display:flex;
+            justify-content:center;
+        border-radius:20px ;
+            flex-direction:column;
+            align-content:center ; 
+            background-color: white;
+      
+            padding: 60px;
+            width: 50%;
+        }
+
+            form div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+        #button-17 {
+            margin-top:45px ; 
+            padding-top:45px;
+            align-items: center;
+            appearance: none;
+            background-color: deepskyblue;
+            border-radius: 24px;
+            border-style: none;
+            box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+            box-sizing: border-box;
+            color: #3c4043;
+            cursor: pointer;
+            display: inline-flex;
+            fill: currentcolor;
+            font-family: "Google Sans",Roboto,Arial,sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            height: 48px;
+            justify-content: center;
+            letter-spacing: .25px;
+            line-height: normal;
+            max-width: 100%;
+            overflow: visible;
+            padding: 2px 24px;
+            position: relative;
+            text-align: center;
+            text-transform: none;
+            transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: auto;
+            will-change: transform,opacity;
+            z-index: 0;
+        }
+
+        .button-17:hover {
+            background: #F6F9FE;
+            color: #174ea6;
+        }
+
+        .button-17:active {
+            box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
+            outline: none;
+        }
+
+        .button-17:focus {
+            outline: none;
+            border: 2px solid #4285f4;
+        }
+
+        .button-17:not(:disabled) {
+            box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+        }
+
+            .button-17:not(:disabled):hover {
+                box-shadow: rgba(60, 64, 67, .3) 0 2px 3px 0, rgba(60, 64, 67, .15) 0 6px 10px 4px;
+            }
+
+            .button-17:not(:disabled):focus {
+                box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+            }
+
+            .button-17:not(:disabled):active {
+                box-shadow: rgba(60, 64, 67, .3) 0 4px 4px 0, rgba(60, 64, 67, .15) 0 8px 12px 6px;
+            }
+
+        .button-17:disabled {
+            box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+        }
+    </style>
+</head>
+<body >
+
+   
+    @if (ViewBag.firstgroup != null)
+    {
+        <div class="d-flex justify-content-center flex-column mt-5">
+            <h6  style="font-size:30px;" dir="rtl" class="  p-3 rounded d-flex   justify-content-center">Title  </h6>
+            <p dir="rtl" class="mt-3 d-flex justify-content-center">descriptopn </p>
+        </div>
+     
+        <form dir="rtl" class="mt-5" asp-action="Index" asp-controller="Question" method="post" onsubmit="return validateForm()">
+           
+            @for (var i = 0; i < ViewBag.firstgroup.Count; i++)
+            {
+                var item = ViewBag.firstgroup[i];
+                <p style="font-weight:bold;font-size:15px ; ">@item</p>
+                <input type="hidden" name="QuestionIds[@i]" value="@i" />
+
+                <div class="d-flex flex-column pt-3">
+                    <div style="display: flex; align-items: center;">
+                        <label style="margin-right: 5px;">کم</label>
+                        <input class="d-flex flex-row-reverse" type="radio" name="AnswerIds[@i]" value="1">
+                    </div>
+
+                    <div class="pt-3">
+                        <label>زیاد</label>
+                        <input  type="radio" name="AnswerIds[@i]" value="2">
+                    </div>
+                    <div class="pt-3">
+                        <label>متوسط</label>
+                        <input type="radio" name="AnswerIds[@i]" value="3">
+                    </div>
+                    <div class="pt-3">
+                        <label>هرگز</label>
+                        <input type="radio" name="AnswerIds[@i]" value="4">
+                    </div>
+                </div>
+                <hr />
+            }
+
+            <button type="submit" id="button-17"  >مرحله بعدی</button>       
+            
+            @* <button class="btn btn-primary mt-5" type="submit">مرحله بعدی</button> *@
+        </form>
+    }
+
+    <script>
+        function validateForm() {
+            var radioGroups = document.querySelectorAll('input[type=radio]');
+            var allGroupsChecked = true;
+
+            radioGroups.forEach(function (radio) {
+                var groupName = radio.getAttribute('name');
+                var groupChecked = false;
+
+                radioGroups.forEach(function (radioInGroup) {
+                    if (radioInGroup.getAttribute('name') === groupName && radioInGroup.checked) {
+                        groupChecked = true;
+                    }
+                });
+
+                if (!groupChecked) {
+                    allGroupsChecked = false;
+                }
+            });
+
+            if (!allGroupsChecked) {
+                alert("لطفا برای همه سوالات یک گزینه انتخاب کنید.");
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+</body>
+</html>
+
+@* @* //  SPACE  SPACE SPACESPACESPACESPACESPACESPACESPACESPACE
+ *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Center Form on Page</title>
+    <style>
+
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            background-color: #8fc4b7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-content: center;
+            background-color: white;
+           
+            padding: 60px;
+            width: 50%;
+        }
+
+            form div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+        #button-17 {
+            margin-top: 45px;
+            padding-top: 45px;
+            align-items: center;
+            appearance: none;
+            background-color: deepskyblue;
+            border-radius: 24px;
+            border-style: none;
+            box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+            box-sizing: border-box;
+            color: #3c4043;
+            cursor: pointer;
+            display: inline-flex;
+            fill: currentcolor;
+            font-family: "Google Sans",Roboto,Arial,sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            height: 48px;
+            justify-content: center;
+            letter-spacing: .25px;
+            line-height: normal;
+            max-width: 100%;
+            overflow: visible;
+            padding: 2px 24px;
+            position: relative;
+            text-align: center;
+            text-transform: none;
+            transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: auto;
+            will-change: transform,opacity;
+            z-index: 0;
+        }
+
+        .button-17:hover {
+            background: #F6F9FE;
+            color: #174ea6;
+        }
+
+        .button-17:active {
+            box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
+            outline: none;
+        }
+
+        .button-17:focus {
+            outline: none;
+            border: 2px solid #4285f4;
+        }
+
+        .button-17:not(:disabled) {
+            box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+        }
+
+            .button-17:not(:disabled):hover {
+                box-shadow: rgba(60, 64, 67, .3) 0 2px 3px 0, rgba(60, 64, 67, .15) 0 6px 10px 4px;
+            }
+
+            .button-17:not(:disabled):focus {
+                box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+            }
+
+            .button-17:not(:disabled):active {
+                box-shadow: rgba(60, 64, 67, .3) 0 4px 4px 0, rgba(60, 64, 67, .15) 0 8px 12px 6px;
+            }
+
+        .button-17:disabled {
+            box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+        }
+    </style>
+</head>
+<body>
+
+
+    @if (ViewBag.secondgroup != null)
+    {
+        <div class="d-flex justify-content-center flex-column mt-5">
+            <h6 style="font-size:30px;" dir="rtl" class="  p-3 rounded d-flex   justify-content-center">Title  </h6>
+            <p dir="rtl" class="mt-3 d-flex justify-content-center">descriptopn </p>
+        </div>
+        <form dir="rtl" style="background-color:white;" class="mt-5 p-5 w-50 background-color: white; border-radius: 5%; padding: 60px; width: 50%;" asp-action="Index" asp-controller="Question" method="post" onsubmit="return validateForm()">
+
+            @for (var i = 0; i < ViewBag.secondgroup.Count; i++)
+            {
+                var item = ViewBag.secondgroup[i];
+                <p style="font-weight:bold;">@item</p>
+                <input type="hidden" name="QuestionIds[@i]" value="@i" />
+                <div class="d-flex flex-column pt-3">
+                    <div class="pt-3">
+                        <label>کم</label>
+                        <input type="radio" name="AnswerIds[@i]" value="1">
+                    </div>
+                    <div class="pt-3">
+                        <label>زیاد</label>
+                        <input type="radio" name="AnswerIds[@i]" value="2">
+                    </div>
+                    <div class="pt-3">
+                        <label>متوسط</label>
+                        <input type="radio" name="AnswerIds[@i]" value="3">
+                    </div>
+                    <div class="pt-3">
+                        <label>هرگز</label>
+                        <input type="radio" name="AnswerIds[@i]" value="4">
+                    </div>
+                </div>
+                <hr />
+            }
+
+          
+                <!-- Add a div with flex properties to center the button -->
+                <button type="submit" id="button-17"  >مرحله بعدی</button>
+         
+
+        </form>
+
+
+    }
+
+    <script>
+        function validateForm() {
+            var radioGroups = document.querySelectorAll('input[type=radio]');
+            var allGroupsChecked = true;
+
+            radioGroups.forEach(function (radio) {
+                var groupName = radio.getAttribute('name');
+                var groupChecked = false;
+
+                radioGroups.forEach(function (radioInGroup) {
+                    if (radioInGroup.getAttribute('name') === groupName && radioInGroup.checked) {
+                        groupChecked = true;
+                    }
+                });
+
+                if (!groupChecked) {
+                    allGroupsChecked = false;
+                }
+            });
+
+            if (!allGroupsChecked) {
+                alert("لطفا برای همه سوالات یک گزینه انتخاب کنید.");
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+</body>
+</html>
+
+@* @* //  SPACE  SPACE SPACESPACESPACESPACESPACESPACESPACESPACE
+ *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Center Form on Page</title>
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            background-color: #8fc4b7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: white;
+        
+            padding: 60px;
+            width: 50%;
+        }
+
+            form div {
+                display: flex;
+                justify-content: space-between;
+            }
+
+        #button-17 {
+            margin-top: 45px;
+            padding-top: 45px;
+            align-items: center;
+            appearance: none;
+            background-color: deepskyblue;
+            border-radius: 24px;
+            border-style: none;
+            box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+            box-sizing: border-box;
+            color: #3c4043;
+            cursor: pointer;
+            display: inline-flex;
+            fill: currentcolor;
+            font-family: "Google Sans",Roboto,Arial,sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            height: 48px;
+            justify-content: center;
+            letter-spacing: .25px;
+            line-height: normal;
+            max-width: 100%;
+            overflow: visible;
+            padding: 2px 24px;
+            position: relative;
+            text-align: center;
+            text-transform: none;
+            transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1),opacity 15ms linear 30ms,transform 270ms cubic-bezier(0, 0, .2, 1) 0ms;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: auto;
+            will-change: transform,opacity;
+            z-index: 0;
+        }
+
+        .button-17:hover {
+            background: #F6F9FE;
+            color: #174ea6;
+        }
+
+        .button-17:active {
+            box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
+            outline: none;
+        }
+
+        .button-17:focus {
+            outline: none;
+            border: 2px solid #4285f4;
+        }
+
+        .button-17:not(:disabled) {
+            box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+        }
+
+            .button-17:not(:disabled):hover {
+                box-shadow: rgba(60, 64, 67, .3) 0 2px 3px 0, rgba(60, 64, 67, .15) 0 6px 10px 4px;
+            }
+
+            .button-17:not(:disabled):focus {
+                box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+            }
+
+            .button-17:not(:disabled):active {
+                box-shadow: rgba(60, 64, 67, .3) 0 4px 4px 0, rgba(60, 64, 67, .15) 0 8px 12px 6px;
+            }
+
+        .button-17:disabled {
+            box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
+        }
+    </style>
+</head>
+<body>
+    @if (ViewBag.thirdgroup != null)
+    {
+        <div class="d-flex justify-content-center flex-column mt-5">
+            <h6 style="font-size:30px;" dir="rtl" class="  p-3 rounded d-flex   justify-content-center">Title  </h6>
+            <p dir="rtl" class="mt-3 d-flex justify-content-center">descriptopn </p>
+        </div>
+        <form dir="rtl" style="background-color:white;" class="mt-5 p-5 w-50" asp-action="Index" asp-controller="Question" method="post" onsubmit="return validateForm()">
+
+            @for (var i = 0; i < ViewBag.thirdgroup.Count; i++)
+            {
+                var item = ViewBag.thirdgroup[i];
+                <p style="font-weight:bold; font-size:25px">@item</p>
+                <input type="hidden" name="QuestionIds[@i]" value="@i" />
+                <div class="d-flex flex-column pt-3">
+                    <div class="pt-3">
+                        <label>کم</label>
+                        <input type="radio" name="AnswerIds[@i]" value="1">
+                    </div>
+                    <div class="pt-3">
+                        <label>زیاد</label>
+                        <input type="radio" name="AnswerIds[@i]" value="2">
+                    </div>
+                    <div class="pt-3">
+                        <label>متوسط</label>
+                        <input type="radio" name="AnswerIds[@i]" value="3">
+                    </div>
+                    <div class="pt-3">
+                        <label>هرگز</label>
+                        <input type="radio" name="AnswerIds[@i]" value="4">
+                    </div>
+                </div>
+                <hr />
+            }
+
+            <button class="btn btn-primary" id="button-17" type="submit">مرحله بعدی</button>
+        </form>
+    }
+
+    <script>
+        function validateForm() {
+            var radioGroups = document.querySelectorAll('input[type=radio]');
+            var allGroupsChecked = true;
+
+            radioGroups.forEach(function (radio) {
+                var groupName = radio.getAttribute('name');
+                var groupChecked = false;
+
+                radioGroups.forEach(function (radioInGroup) {
+                    if (radioInGroup.getAttribute('name') === groupName && radioInGroup.checked) {
+                        groupChecked = true;
+                    }
+                });
+
+                if (!groupChecked) {
+                    allGroupsChecked = false;
+                }
+            });
+
+            if (!allGroupsChecked) {
+                alert("لطفا برای همه سوالات یک گزینه انتخاب کنید.");
+                return false;
+            }
+
+            return true;
+        }
+
+    </script>
+
+</body>
+</html>
+
+@* @* //  SPACE  SPACE SPACESPACESPACESPACESPACESPACESPACESPACE
+ *@
+
+
+
+ 
+ 
+
+
+
+
+
+

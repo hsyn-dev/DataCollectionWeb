@@ -1,0 +1,23 @@
+﻿ 
+/* Custom CSS for responsive design */
+.background-image {
+    background-image: url('@Url.Content("~/images/background.png")');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@media (max-width: 576px) {
+    /* CSS for phones */
+    .col-12 {
+        width: 100%;
+    }
+}
+
+@media (min-width: 576px) {
+    /* CSS for PCs */
+    .col-12 {
+        width: 50%;
+    }
+}
+
+ 

@@ -6,17 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataCollectionWeb.Models;
 
-[Table("StoryTable")]
-public partial class StoryTable
+[Table("QuestionTable")]
+public partial class QuestionTable
 {
+    [Column("Questionneir_Id")]
+    public int? QuestionneirId { get; set; }
+
     [Key]
-    [Column("Story_ID")]
-    public int StoryId { get; set; }
+    [Column("Question_Id")]
+    public int QuestionId { get; set; }
 
     public string? Tittle { get; set; }
-
-    public string? Description { get; set; }
-
-    [Column("Time_Limited")]
-    public string? TimeLimited { get; set; }
 }
